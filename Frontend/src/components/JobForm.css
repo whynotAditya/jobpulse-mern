@@ -1,0 +1,55 @@
+/* Job Form */
+.job-form-wrapper {}
+.form-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.form-header h2 { font-size: 1.25rem; font-weight: 700; }
+.close-btn {
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; padding: 4px; border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+.close-btn:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+
+.job-form { display: flex; flex-direction: column; gap: 14px; }
+
+.form-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+@media (max-width: 500px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.form-field { display: flex; flex-direction: column; gap: 4px; }
+.form-field label {
+  font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color); border-radius: var(--radius-sm);
+  background: var(--bg-primary); color: var(--text-primary);
+  font-family: var(--font-sans); font-size: 0.875rem; outline: none;
+  transition: border var(--transition-fast);
+  resize: vertical;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: var(--color-accent);
+}
+
+.submit-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 11px 20px; margin-top: 4px;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+  color: white; border: none; border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.35);
+}
+.submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }

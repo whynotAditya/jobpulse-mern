@@ -1,0 +1,73 @@
+/* Jobs Page */
+.jobs-page { padding: 8px 0; }
+
+.jobs-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+}
+.jobs-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 2px; }
+.jobs-header p { color: var(--text-secondary); font-size: 0.9rem; }
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+  color: white; border: none; border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.35); }
+
+/* Toolbar */
+.jobs-toolbar {
+  display: flex; flex-direction: column; gap: 12px;
+  margin-bottom: 20px;
+}
+.search-box {
+  position: relative; max-width: 400px;
+}
+.search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--text-muted); pointer-events: none;
+}
+.search-box input {
+  width: 100%; padding: 10px 14px 10px 38px;
+  border: 1px solid var(--border-color); border-radius: var(--radius-sm);
+  background: var(--bg-secondary); color: var(--text-primary);
+  font-family: var(--font-sans); font-size: 0.875rem; outline: none;
+  transition: border var(--transition-fast);
+}
+.search-box input:focus { border-color: var(--color-accent); }
+
+.filter-group {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  color: var(--text-secondary);
+}
+.filter-chip {
+  padding: 6px 14px; border: 1px solid var(--border-color);
+  border-radius: var(--radius-full); background: var(--bg-secondary);
+  color: var(--text-secondary); font-family: var(--font-sans);
+  font-size: 0.8rem; font-weight: 500; cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.filter-chip:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.filter-chip.active {
+  background: var(--color-accent); color: white; border-color: var(--color-accent);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 24px;
+}
+.modal-content {
+  width: 100%; max-width: 520px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-xl);
+  max-height: 90vh; overflow-y: auto;
+}

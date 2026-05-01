@@ -1,41 +1,158 @@
 import Job from "../models/job.js";
+import asyncHandler from "../middleware/asyncHandler.js";
 
-export const createJob = async (req, res) => {
-    try {
-        const job = await Job.create(req.body);
-        res.status(201).json(job);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+// ────────────────────────────────────────
+// POST /api/jobs
+// ────────────────────────────────────────
+export const createJob = asyncHandler(async (req, res) => {
+    const { title, company, role, location, salary, description, status, appliedDate, notes } = req.body;
 
-export const getJobs = async (req, res) => {
-    try {
-        const jobs = await Job.find();
-        res.json(jobs);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    if (!title || !company) {
+        res.status(400);
+        throw new Error("Title and Company are required");
     }
-};
 
-export const deleteJob = async (req, res) => {
-    try {
-        await Job.findByIdAndDelete(req.params.id);
-        res.json({ message: "Job deleted" });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+    const job = await Job.create({
+        user: req.user._id,
+        title,
+        company,
+        role: role || "",
+        location: location || "",
+        salary: salary || "",
+        description: description || "",
+        status: status || "Saved",
+        appliedDate: appliedDate || null,
+        notes: notes || "",
+    });
 
-export const updateJob = async (req, res) => {
-    try {
-        const updatedJob = await Job.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
-        );
-        res.json(updatedJob);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
+    res.status(201).json({ success: true, data: job });
+});
+
+// ────────────────────────────────────────
+// GET /api/jobs
+// Supports ?status=Applied&search=google&sort=-createdAt
+// ────────────────────────────────────────
+export const getJobs = asyncHandler(async (req, res) => {
+    const query = { user: req.user._id };
+
+    // Filter by status
+    if (req.query.status) {
+        query.status = req.query.status;
     }
-};
+
+    // Search by title or company
+    if (req.query.search) {
+        const searchRegex = new RegExp(req.query.search, "i");
+        query.$or = [{ title: searchRegex }, { company: searchRegex }];
+    }
+
+    // Sort (default: newest first)
+    const sort = req.query.sort || "-createdAt";
+
+    const jobs = await Job.find(query).sort(sort);
+
+    res.json({ success: true, count: jobs.length, data: jobs });
+});
+
+// ────────────────────────────────────────
+// GET /api/jobs/stats
+// ────────────────────────────────────────
+export const getJobStats = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+
+    const [stats] = await Job.aggregate([
+        { $match: { user: userId } },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: 1 },
+                applied: { $sum: { $cond: [{ $eq: ["$status", "Applied"] }, 1, 0] } },
+                interview: { $sum: { $cond: [{ $eq: ["$status", "Interview"] }, 1, 0] } },
+                offer: { $sum: { $cond: [{ $eq: ["$status", "Offer"] }, 1, 0] } },
+                rejected: { $sum: { $cond: [{ $eq: ["$status", "Rejected"] }, 1, 0] } },
+                saved: { $sum: { $cond: [{ $eq: ["$status", "Saved"] }, 1, 0] } },
+            },
+        },
+    ]);
+
+    const defaultStats = {
+        total: 0,
+        applied: 0,
+        interview: 0,
+        offer: 0,
+        rejected: 0,
+        saved: 0,
+    };
+
+    const result = stats || defaultStats;
+
+    // Calculate rates
+    const successRate = result.total > 0
+        ? Math.round((result.offer / result.total) * 100)
+        : 0;
+    const interviewRate = result.total > 0
+        ? Math.round((result.interview / result.total) * 100)
+        : 0;
+
+    res.json({
+        success: true,
+        data: {
+            ...result,
+            _id: undefined,
+            successRate,
+            interviewRate,
+        },
+    });
+});
+
+// ────────────────────────────────────────
+// GET /api/jobs/:id
+// ────────────────────────────────────────
+export const getJobById = asyncHandler(async (req, res) => {
+    const job = await Job.findOne({ _id: req.params.id, user: req.user._id });
+
+    if (!job) {
+        res.status(404);
+        throw new Error("Job not found");
+    }
+
+    res.json({ success: true, data: job });
+});
+
+// ────────────────────────────────────────
+// PUT /api/jobs/:id
+// ────────────────────────────────────────
+export const updateJob = asyncHandler(async (req, res) => {
+    const job = await Job.findOne({ _id: req.params.id, user: req.user._id });
+
+    if (!job) {
+        res.status(404);
+        throw new Error("Job not found");
+    }
+
+    // Only update provided fields
+    const allowedFields = ["title", "company", "role", "location", "salary", "description", "status", "appliedDate", "notes"];
+    allowedFields.forEach((field) => {
+        if (req.body[field] !== undefined) {
+            job[field] = req.body[field];
+        }
+    });
+
+    const updatedJob = await job.save();
+    res.json({ success: true, data: updatedJob });
+});
+
+// ────────────────────────────────────────
+// DELETE /api/jobs/:id
+// ────────────────────────────────────────
+export const deleteJob = asyncHandler(async (req, res) => {
+    const job = await Job.findOne({ _id: req.params.id, user: req.user._id });
+
+    if (!job) {
+        res.status(404);
+        throw new Error("Job not found");
+    }
+
+    await job.deleteOne();
+    res.json({ success: true, message: "Job removed" });
+});

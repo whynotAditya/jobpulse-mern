@@ -1,0 +1,84 @@
+/* Dashboard */
+.dashboard { padding: 8px 0; }
+.dashboard-header { margin-bottom: 28px; }
+.dashboard-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 4px; }
+.dashboard-header p { color: var(--text-secondary); font-size: 0.95rem; }
+
+.dashboard-loading {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 300px;
+}
+.spinner-lg {
+  width: 32px; height: 32px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* Stat Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn 0.4s ease both;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+.stat-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.stat-accent .stat-icon { background: var(--color-accent-light); color: var(--color-accent); }
+.stat-success .stat-icon { background: var(--color-success-light); color: var(--color-success); }
+.stat-error .stat-icon { background: var(--color-error-light); color: var(--color-error); }
+.stat-warning .stat-icon { background: var(--color-warning-light); color: var(--color-warning); }
+.stat-purple .stat-icon { background: var(--color-purple-light); color: var(--color-purple); }
+
+.stat-info { display: flex; flex-direction: column; }
+.stat-value { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+.stat-label { font-size: 0.8rem; color: var(--text-secondary); }
+
+/* Rate Rings */
+.rates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.rate-card {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 12px; padding: 24px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.rate-ring {
+  position: relative; width: 100px; height: 100px;
+}
+.rate-ring svg { transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: var(--border-color); stroke-width: 8; }
+.ring-fill {
+  fill: none; stroke-width: 8; stroke-linecap: round;
+  transition: stroke-dasharray 1s ease;
+}
+.ring-success { stroke: var(--color-success); }
+.ring-interview { stroke: var(--color-warning); }
+.rate-value {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; font-weight: 700;
+}
+.rate-label { font-size: 0.875rem; color: var(--text-secondary); font-weight: 500; }

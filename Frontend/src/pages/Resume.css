@@ -1,0 +1,47 @@
+/* Resume Page */
+.resume-page { padding: 8px 0; }
+.resume-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+}
+.resume-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 2px; }
+.resume-header p { color: var(--text-secondary); font-size: 0.9rem; }
+
+.upload-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+  color: white; border: none; border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.upload-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.35); }
+
+.resume-list { display: flex; flex-direction: column; gap: 14px; }
+
+.resume-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px; box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.resume-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+.rc-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.rc-icon { color: var(--color-accent); flex-shrink: 0; }
+.rc-info { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rc-info h3 { font-size: 0.95rem; font-weight: 600; }
+
+.skills-wrap {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;
+}
+.skill-tag {
+  padding: 3px 10px; border-radius: var(--radius-full);
+  background: var(--color-accent-light); color: var(--color-accent);
+  font-size: 0.75rem; font-weight: 500;
+}
+.keywords-text {
+  font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;
+}

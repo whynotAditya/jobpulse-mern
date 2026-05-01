@@ -2,15 +2,20 @@ import express from "express";
 import {
     createJob,
     getJobs,
+    getJobById,
+    getJobStats,
+    updateJob,
     deleteJob,
-    updateJob
 } from "../controllers/jobController.js";
+import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", createJob);
-router.get("/", getJobs);
-router.delete("/:id", deleteJob);
-router.put("/:id", updateJob);
+// All job routes require authentication
+router.use(protect);
+
+router.route("/").get(getJobs).post(createJob);
+router.get("/stats", getJobStats);
+router.route("/:id").get(getJobById).put(updateJob).delete(deleteJob);
 
 export default router;

@@ -1,31 +1,82 @@
-import { useEffect, useState } from "react";
-import API from "./Api";
-import JobForm from "./components/JobForm";
-import JobList from "./components/JobList";
-import "./App.css";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import Layout from "./components/Layout";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Jobs from "./pages/Jobs";
+import ResumePage from "./pages/Resume";
+
+function ProtectedRoute({ children }) {
+    const { user, loading } = useAuth();
+    if (loading) {
+        return (
+            <div style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                minHeight: "100vh"
+            }}>
+                <div className="spinner-lg" style={{
+                    width: 32, height: 32,
+                    border: "3px solid #E2E8F0",
+                    borderTopColor: "#3B82F6",
+                    borderRadius: "50%",
+                    animation: "spin 0.7s linear infinite"
+                }} />
+            </div>
+        );
+    }
+    return user ? children : <Navigate to="/login" replace />;
+}
+
+function GuestRoute({ children }) {
+    const { user, loading } = useAuth();
+    if (loading) return null;
+    return user ? <Navigate to="/" replace /> : children;
+}
 
 function App() {
-    const [jobs, setJobs] = useState([]);
-
-    const fetchJobs = async () => {
-        try {
-            const res = await API.get("/jobs");
-            setJobs(res.data);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    useEffect(() => {
-        fetchJobs();
-    }, []);
-
     return (
-        <div className="container">
-            <h1 className="title">JobPulse 🚀</h1>
-            <JobForm fetchJobs={fetchJobs} />
-            <JobList jobs={jobs} fetchJobs={fetchJobs} />
-        </div>
+        <ThemeProvider>
+            <AuthProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+                        <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
+
+                        <Route path="/" element={
+                            <ProtectedRoute>
+                                <Layout><Dashboard /></Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/jobs" element={
+                            <ProtectedRoute>
+                                <Layout><Jobs /></Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/resume" element={
+                            <ProtectedRoute>
+                                <Layout><ResumePage /></Layout>
+                            </ProtectedRoute>
+                        } />
+
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                </BrowserRouter>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop
+                    closeOnClick
+                    pauseOnHover
+                    theme="colored"
+                />
+            </AuthProvider>
+        </ThemeProvider>
     );
 }
 
