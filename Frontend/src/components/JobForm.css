@@ -1,55 +1,121 @@
-/* Job Form */
+/* ═══════════════════════════════════
+   Job Form — Glassmorphism Modal
+   ═══════════════════════════════════ */
+
 .job-form-wrapper {}
+
+/* ─── Header ───────────────────────── */
 .form-header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 22px; padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
 }
-.form-header h2 { font-size: 1.25rem; font-weight: 700; }
+.form-header h2 {
+  font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
 .close-btn {
-  background: none; border: none; color: var(--text-muted);
-  cursor: pointer; padding: 4px; border-radius: var(--radius-sm);
-  transition: color var(--transition-fast), background var(--transition-fast);
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  background: none; border: 1px solid var(--border-color);
+  color: var(--text-muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-fast);
 }
-.close-btn:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+.close-btn:hover {
+  background: var(--color-error-light); color: var(--color-error);
+  border-color: var(--color-error);
+}
 
-.job-form { display: flex; flex-direction: column; gap: 14px; }
+/* ─── Form ─────────────────────────── */
+.job-form { display: flex; flex-direction: column; gap: 16px; }
 
 .form-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
 }
-@media (max-width: 500px) {
-  .form-row { grid-template-columns: 1fr; }
-}
+@media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
 
-.form-field { display: flex; flex-direction: column; gap: 4px; }
+.form-field { display: flex; flex-direction: column; gap: 5px; }
 .form-field label {
-  font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
+  font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.06em;
 }
 .form-field input,
 .form-field select,
 .form-field textarea {
-  padding: 10px 12px;
-  border: 1px solid var(--border-color); border-radius: var(--radius-sm);
-  background: var(--bg-primary); color: var(--text-primary);
-  font-family: var(--font-sans); font-size: 0.875rem; outline: none;
-  transition: border var(--transition-fast);
+  padding: 10px 13px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   resize: vertical;
 }
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: var(--text-muted); }
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
   border-color: var(--color-accent);
+  box-shadow: var(--shadow-glow);
+  background: var(--bg-secondary);
 }
 
+/* Status select styling */
+.form-field select { cursor: pointer; }
+
+/* ─── Submit Button ─────────────────── */
 .submit-btn {
   display: inline-flex; align-items: center; justify-content: center;
-  gap: 8px; padding: 11px 20px; margin-top: 4px;
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+  gap: 8px; padding: 12px 22px; margin-top: 4px;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-purple));
   color: white; border: none; border-radius: var(--radius-sm);
-  font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600;
-  cursor: pointer; transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  font-family: var(--font-sans); font-size: 0.925rem; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.01em;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: var(--shadow-accent);
+  position: relative; overflow: hidden;
 }
+.submit-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+.submit-btn:hover::after { transform: translateX(100%); }
 .submit-btn:hover:not(:disabled) {
-  transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(99,102,241,0.4);
 }
-.submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+.submit-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+/* ─── Modal ─────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 24px;
+  animation: fadeInFast 0.2s ease both;
+}
+.modal-content {
+  width: 100%; max-width: 540px;
+  background: var(--bg-glass-heavy);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(99,102,241,0.08);
+  max-height: 90vh; overflow-y: auto;
+  animation: scaleIn 0.25s var(--transition-spring) both;
+}
+[data-theme="dark"] .modal-content {
+  background: rgba(12,12,24,0.95);
+  border-color: rgba(99,102,241,0.15);
+}

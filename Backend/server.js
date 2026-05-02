@@ -12,6 +12,7 @@ import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import authRoutes from "./routes/authRoutes.js";
 import jobRoutes from "./routes/jobroutes.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
 
 // ─── Config ──────────────────────────────
 dotenv.config();
@@ -66,6 +67,7 @@ app.get("/", (_req, res) => {
             auth: "/api/auth",
             jobs: "/api/jobs",
             resume: "/api/resume",
+            ai: "/api/ai",
         },
     });
 });
@@ -73,6 +75,7 @@ app.get("/", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/resume", resumeRoutes);
+app.use("/api/ai", aiRoutes);
 
 // ─── Error Handling ──────────────────────
 app.use(notFound);

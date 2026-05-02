@@ -4,6 +4,7 @@ import {
     getJobs,
     getJobById,
     getJobStats,
+    getWeeklyStats,
     updateJob,
     deleteJob,
 } from "../controllers/jobController.js";
@@ -16,6 +17,7 @@ router.use(protect);
 
 router.route("/").get(getJobs).post(createJob);
 router.get("/stats", getJobStats);
+router.get("/weekly-stats", getWeeklyStats);
 router.route("/:id").get(getJobById).put(updateJob).delete(deleteJob);
 
 export default router;

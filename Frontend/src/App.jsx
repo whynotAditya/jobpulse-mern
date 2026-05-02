@@ -10,6 +10,9 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Jobs from "./pages/Jobs";
 import ResumePage from "./pages/Resume";
+import KanbanBoard from "./pages/KanbanBoard";
+import InterviewPrep from "./pages/InterviewPrep";
+import Profile from "./pages/Profile";
 
 function ProtectedRoute({ children }) {
     const { user, loading } = useAuth();
@@ -57,9 +60,24 @@ function App() {
                                 <Layout><Jobs /></Layout>
                             </ProtectedRoute>
                         } />
+                        <Route path="/kanban" element={
+                            <ProtectedRoute>
+                                <Layout><KanbanBoard /></Layout>
+                            </ProtectedRoute>
+                        } />
                         <Route path="/resume" element={
                             <ProtectedRoute>
                                 <Layout><ResumePage /></Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/interview-prep" element={
+                            <ProtectedRoute>
+                                <Layout><InterviewPrep /></Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/profile" element={
+                            <ProtectedRoute>
+                                <Layout><Profile /></Layout>
                             </ProtectedRoute>
                         } />
 

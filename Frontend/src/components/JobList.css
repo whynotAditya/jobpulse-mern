@@ -1,94 +1,139 @@
-/* Job List */
-.job-list { display: flex; flex-direction: column; gap: 14px; }
+/* ═══════════════════════════════════
+   Job List — Premium Card Design
+   ═══════════════════════════════════ */
 
+.job-list { display: flex; flex-direction: column; gap: 12px; }
+
+/* ─── Job Card ─────────────────────── */
 .job-card {
-  background: var(--bg-secondary);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 20px;
+  padding: 20px 20px 16px;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative; overflow: hidden;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+              border-color var(--transition-fast);
+  animation: fadeIn 0.4s ease both;
 }
+
+/* Hover lift + glow */
 .job-card:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border-hover);
   border-color: var(--border-hover);
 }
 
+/* Colored left accent strip */
+.job-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; border-radius: 4px 0 0 4px;
+  transition: opacity var(--transition-fast);
+}
+.job-card-applied::before   { background: var(--color-accent); }
+.job-card-interview::before { background: var(--color-warning); }
+.job-card-offer::before     { background: var(--color-success); }
+.job-card-rejected::before  { background: var(--color-error); }
+.job-card-saved::before     { background: var(--color-purple); }
+
+/* Dark mode tinted card bg based on status */
+[data-theme="dark"] .job-card-applied   { background: linear-gradient(135deg, rgba(99,102,241,0.04), var(--bg-card)); }
+[data-theme="dark"] .job-card-interview { background: linear-gradient(135deg, rgba(245,158,11,0.04), var(--bg-card)); }
+[data-theme="dark"] .job-card-offer     { background: linear-gradient(135deg, rgba(16,185,129,0.04), var(--bg-card)); }
+[data-theme="dark"] .job-card-rejected  { background: linear-gradient(135deg, rgba(239,68,68,0.04), var(--bg-card)); }
+[data-theme="dark"] .job-card-saved     { background: linear-gradient(135deg, rgba(168,85,247,0.04), var(--bg-card)); }
+
+/* ─── Card Top ─────────────────────── */
 .card-top {
   display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 12px; margin-bottom: 10px;
+  gap: 14px; margin-bottom: 12px; padding-left: 8px;
 }
-.card-info { flex: 1; }
-.job-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 2px; }
-.job-company { font-size: 0.875rem; color: var(--text-secondary); }
+.card-info { flex: 1; min-width: 0; }
+.job-title {
+  font-size: 1rem; font-weight: 700; margin-bottom: 3px;
+  letter-spacing: -0.01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.job-company { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
 
-/* Status Badges */
+/* ─── Status Badges ─────────────────── */
 .status-badge {
-  display: inline-flex; padding: 4px 12px;
-  border-radius: var(--radius-full);
-  font-size: 0.75rem; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: var(--radius-full);
+  font-size: 0.72rem; font-weight: 700;
   white-space: nowrap; flex-shrink: 0;
+  letter-spacing: 0.04em; text-transform: uppercase;
 }
-.badge-accent { background: var(--color-accent-light); color: var(--color-accent); }
-.badge-success { background: var(--color-success-light); color: var(--color-success); }
-.badge-error { background: var(--color-error-light); color: var(--color-error); }
-.badge-warning { background: var(--color-warning-light); color: var(--color-warning); }
-.badge-purple { background: var(--color-purple-light); color: var(--color-purple); }
+.status-badge::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: currentColor; opacity: 0.7;
+}
+.badge-accent   { background: var(--color-accent-light);  color: var(--color-accent); }
+.badge-success  { background: var(--color-success-light); color: var(--color-success); }
+.badge-error    { background: var(--color-error-light);   color: var(--color-error); }
+.badge-warning  { background: var(--color-warning-light); color: var(--color-warning); }
+.badge-purple   { background: var(--color-purple-light);  color: var(--color-purple); }
 
-/* Meta */
+/* ─── Meta Row ─────────────────────── */
 .card-meta {
-  display: flex; flex-wrap: wrap; gap: 14px;
-  margin-bottom: 8px;
+  display: flex; flex-wrap: wrap; gap: 12px;
+  margin-bottom: 10px; padding-left: 8px;
 }
 .meta-item {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 0.8rem; color: var(--text-muted);
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.78rem; color: var(--text-muted); font-weight: 500;
 }
 
+/* ─── Description / Notes ──────────── */
 .card-desc {
-  font-size: 0.85rem; color: var(--text-secondary);
-  margin-bottom: 6px; line-height: 1.5;
+  font-size: 0.825rem; color: var(--text-secondary);
+  line-height: 1.55; margin-bottom: 6px; padding-left: 8px;
+  /* Clamp to 2 lines */
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
 }
 .card-notes {
-  font-size: 0.8rem; color: var(--text-muted);
-  font-style: italic; margin-bottom: 6px;
+  font-size: 0.78rem; color: var(--text-muted);
+  font-style: italic; margin-bottom: 6px; padding-left: 8px;
 }
 
-/* Actions */
+/* ─── Actions ──────────────────────── */
 .card-actions {
-  display: flex; gap: 8px; margin-top: 10px; padding-top: 10px;
+  display: flex; gap: 8px; margin-top: 12px; padding-top: 12px;
   border-top: 1px solid var(--border-color);
+  padding-left: 8px;
 }
 .action-btn {
-  display: inline-flex; align-items: center; gap: 4px;
+  display: inline-flex; align-items: center; gap: 5px;
   padding: 6px 14px; border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm); background: var(--bg-primary);
+  border-radius: var(--radius-sm); background: transparent;
   color: var(--text-secondary); font-family: var(--font-sans);
-  font-size: 0.8rem; font-weight: 500; cursor: pointer;
+  font-size: 0.78rem; font-weight: 600; cursor: pointer;
   transition: all var(--transition-fast);
 }
-.edit-btn:hover { border-color: var(--color-accent); color: var(--color-accent); background: var(--color-accent-light); }
-.delete-btn:hover { border-color: var(--color-error); color: var(--color-error); background: var(--color-error-light); }
+.edit-btn:hover {
+  border-color: var(--color-accent); color: var(--color-accent);
+  background: var(--color-accent-light); transform: translateY(-1px);
+}
+.delete-btn:hover {
+  border-color: var(--color-error); color: var(--color-error);
+  background: var(--color-error-light); transform: translateY(-1px);
+}
 
-/* Loading Skeleton */
-.list-loading { display: flex; flex-direction: column; gap: 14px; }
+/* ─── Loading Skeleton ─────────────── */
+.list-loading { display: flex; flex-direction: column; gap: 12px; }
 .skeleton-card {
-  height: 120px; border-radius: var(--radius-md);
+  height: 130px; border-radius: var(--radius-md);
   background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  animation: shimmer 1.6s ease-in-out infinite;
 }
 
-/* Empty State */
+/* ─── Empty State ──────────────────── */
 .empty-state {
-  text-align: center; padding: 60px 20px;
-  color: var(--text-muted);
+  text-align: center; padding: 72px 20px; color: var(--text-muted);
 }
-.empty-icon { font-size: 3rem; display: block; margin-bottom: 12px; }
-.empty-state h3 { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 4px; }
+.empty-icon { font-size: 3.5rem; display: block; margin-bottom: 16px; filter: grayscale(0.3); }
+.empty-state h3 { font-size: 1.15rem; color: var(--text-secondary); font-weight: 700; margin-bottom: 6px; }
 .empty-state p { font-size: 0.875rem; }

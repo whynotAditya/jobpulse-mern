@@ -156,3 +156,52 @@ export const deleteJob = asyncHandler(async (req, res) => {
     await job.deleteOne();
     res.json({ success: true, message: "Job removed" });
 });
+
+// ────────────────────────────────────────
+// GET /api/jobs/weekly-stats
+// Returns daily application counts for last 8 weeks
+// ────────────────────────────────────────
+export const getWeeklyStats = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const weeks = 8;
+    const since = new Date();
+    since.setDate(since.getDate() - weeks * 7);
+
+    const raw = await Job.aggregate([
+        { $match: { user: userId, createdAt: { $gte: since } } },
+        {
+            $group: {
+                _id: {
+                    year: { $year: "$createdAt" },
+                    week: { $isoWeek: "$createdAt" },
+                },
+                count: { $sum: 1 },
+                applied: { $sum: { $cond: [{ $eq: ["$status", "Applied"] }, 1, 0] } },
+                interview: { $sum: { $cond: [{ $eq: ["$status", "Interview"] }, 1, 0] } },
+                offer: { $sum: { $cond: [{ $eq: ["$status", "Offer"] }, 1, 0] } },
+            },
+        },
+        { $sort: { "_id.year": 1, "_id.week": 1 } },
+    ]);
+
+    // Build full 8-week labels even if some weeks are empty
+    const result = [];
+    for (let i = weeks - 1; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i * 7);
+        const year = d.getFullYear();
+        const startOfYear = new Date(year, 0, 1);
+        const week = Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+        const label = `W${week}`;
+        const found = raw.find((r) => r._id.year === year && r._id.week === week);
+        result.push({
+            label,
+            count: found?.count || 0,
+            applied: found?.applied || 0,
+            interview: found?.interview || 0,
+            offer: found?.offer || 0,
+        });
+    }
+
+    res.json({ success: true, data: result });
+});

@@ -25,10 +25,12 @@ const sendTokenResponse = (res, user, statusCode = 200) => {
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.cookie("jwt", accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -134,10 +136,12 @@ export const refreshToken = asyncHandler(async (req, res) => {
 
         const accessToken = generateAccessToken(user._id);
 
+        const isProduction = process.env.NODE_ENV === "production";
+
         res.cookie("jwt", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
@@ -146,4 +150,64 @@ export const refreshToken = asyncHandler(async (req, res) => {
         res.status(401);
         throw new Error("Invalid or expired refresh token");
     }
+});
+
+// ────────────────────────────────────────
+// PUT /api/auth/profile
+// ────────────────────────────────────────
+export const updateProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    const { name, email } = req.body;
+
+    if (email && email !== user.email) {
+        const exists = await User.findOne({ email });
+        if (exists) {
+            res.status(400);
+            throw new Error("Email already in use");
+        }
+        user.email = email;
+    }
+
+    if (name) user.name = name;
+
+    const updated = await user.save();
+    res.json({
+        success: true,
+        user: { _id: updated._id, name: updated.name, email: updated.email },
+    });
+});
+
+// ────────────────────────────────────────
+// PUT /api/auth/password
+// ────────────────────────────────────────
+export const changePassword = asyncHandler(async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+        res.status(400);
+        throw new Error("Please provide current and new password");
+    }
+
+    if (newPassword.length < 6) {
+        res.status(400);
+        throw new Error("New password must be at least 6 characters");
+    }
+
+    const user = await User.findById(req.user._id).select("+password");
+
+    if (!user || !(await user.matchPassword(currentPassword))) {
+        res.status(401);
+        throw new Error("Current password is incorrect");
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ success: true, message: "Password updated successfully" });
 });

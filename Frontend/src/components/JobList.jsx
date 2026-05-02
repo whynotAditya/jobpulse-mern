@@ -46,7 +46,7 @@ export default function JobList({ jobs, fetchJobs, loading, onEdit }) {
     return (
         <div className="job-list">
             {jobs.map((job, i) => (
-                <div key={job._id} className="job-card animate-fade" style={{ animationDelay: `${i * 60}ms` }}>
+                <div key={job._id} className={`job-card job-card-${job.status.toLowerCase()} animate-fade`} style={{ animationDelay: `${i * 60}ms` }}>
                     <div className="card-top">
                         <div className="card-info">
                             <h3 className="job-title">{job.title}</h3>

@@ -2,8 +2,15 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import { Mail, Lock, User, UserPlus } from "lucide-react";
+import { Mail, Lock, User, ArrowRight } from "lucide-react";
 import "./Auth.css";
+
+const FEATURES = [
+    { icon: "🚀", text: "Get started in under 2 minutes" },
+    { icon: "🔒", text: "Enterprise-grade JWT security" },
+    { icon: "🧠", text: "AI resume analysis included free" },
+    { icon: "📈", text: "Track success rates & interview rates" },
+];
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -31,37 +38,100 @@ export default function Register() {
 
     return (
         <div className="auth-page">
-            <div className="auth-container animate-fade">
-                <div className="auth-header">
-                    <div className="auth-logo">
-                        <span className="logo-icon">⚡</span>
-                        <span className="logo-text">JobPulse</span>
+            {/* ─── Left Panel ─── */}
+            <div className="auth-panel-left">
+                <div className="auth-orb auth-orb-1" />
+                <div className="auth-orb auth-orb-2" />
+                <div className="auth-orb auth-orb-3" />
+
+                <div className="auth-left-content">
+                    <div className="auth-left-logo">
+                        <div className="auth-logo-icon">⚡</div>
+                        <span>JobPulse</span>
                     </div>
-                    <h1>Create account</h1>
-                    <p>Start tracking your job applications today</p>
+                    <h2 className="auth-left-headline">
+                        Land your<br />
+                        <span className="highlight">dream job</span>
+                    </h2>
+                    <p className="auth-left-sub">
+                        Join thousands of job seekers who use JobPulse to organize
+                        applications and get hired faster.
+                    </p>
+                    <div className="auth-features-list">
+                        {FEATURES.map((f, i) => (
+                            <div key={i} className="auth-feature-item">
+                                <div className="auth-feature-icon">{f.icon}</div>
+                                <span className="auth-feature-text">{f.text}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
+            </div>
 
-                <form onSubmit={handleSubmit} className="auth-form">
-                    <div className="input-group">
-                        <User size={18} className="input-icon" />
-                        <input id="register-name" type="text" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} />
+            {/* ─── Right Panel ─── */}
+            <div className="auth-panel-right">
+                <div className="auth-container">
+                    <div className="auth-header">
+                        <div className="auth-back-logo">
+                            <div className="mini-logo-icon">⚡</div>
+                            <span>JobPulse</span>
+                        </div>
+                        <h1>Create account</h1>
+                        <p>Start tracking your career today — it&apos;s free</p>
                     </div>
-                    <div className="input-group">
-                        <Mail size={18} className="input-icon" />
-                        <input id="register-email" type="email" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    </div>
-                    <div className="input-group">
-                        <Lock size={18} className="input-icon" />
-                        <input id="register-password" type="password" placeholder="Password (6+ characters)" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </div>
-                    <button id="register-submit" type="submit" className="auth-btn" disabled={loading}>
-                        {loading ? <span className="spinner" /> : <><UserPlus size={18} />Create Account</>}
-                    </button>
-                </form>
 
-                <p className="auth-footer">
-                    Already have an account? <Link to="/login">Sign in</Link>
-                </p>
+                    <form onSubmit={handleSubmit} className="auth-form">
+                        <div className="input-group">
+                            <User size={17} className="input-icon" />
+                            <input
+                                id="register-name"
+                                type="text"
+                                placeholder="Your full name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                autoComplete="name"
+                            />
+                        </div>
+                        <div className="input-group">
+                            <Mail size={17} className="input-icon" />
+                            <input
+                                id="register-email"
+                                type="email"
+                                placeholder="Email address"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                autoComplete="email"
+                            />
+                        </div>
+                        <div className="input-group">
+                            <Lock size={17} className="input-icon" />
+                            <input
+                                id="register-password"
+                                type="password"
+                                placeholder="Password (min 6 characters)"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                autoComplete="new-password"
+                            />
+                        </div>
+                        <button id="register-submit" type="submit" className="auth-btn" disabled={loading}>
+                            {loading ? (
+                                <span className="spinner" />
+                            ) : (
+                                <>Create Free Account <ArrowRight size={17} /></>
+                            )}
+                        </button>
+                    </form>
+
+                    <p className="auth-footer">
+                        Already have an account?{" "}
+                        <Link to="/login">Sign in →</Link>
+                    </p>
+                    <p className="auth-terms">
+                        By creating an account, you agree to our{" "}
+                        <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a>
+                    </p>
+                </div>
             </div>
         </div>
     );

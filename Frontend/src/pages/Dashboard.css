@@ -1,8 +1,8 @@
 /* Dashboard */
-.dashboard { padding: 8px 0; }
+.dashboard { padding: 4px 0; }
 .dashboard-header { margin-bottom: 28px; }
-.dashboard-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 4px; }
-.dashboard-header p { color: var(--text-secondary); font-size: 0.95rem; }
+.dashboard-header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.02em; }
+.dashboard-header p { color: var(--text-secondary); font-size: 0.875rem; }
 
 .dashboard-loading {
   display: flex; align-items: center; justify-content: center;
@@ -14,21 +14,22 @@
   border-top-color: var(--color-accent);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+  display: block;
 }
 
 /* Stat Cards */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
-  margin-bottom: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
 }
 .stat-card {
   display: flex; align-items: center; gap: 14px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 20px;
+  padding: 18px;
   box-shadow: var(--shadow-sm);
   animation: fadeIn 0.4s ease both;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
@@ -41,44 +42,177 @@
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.stat-accent .stat-icon { background: var(--color-accent-light); color: var(--color-accent); }
+.stat-accent .stat-icon  { background: var(--color-accent-light); color: var(--color-accent); }
 .stat-success .stat-icon { background: var(--color-success-light); color: var(--color-success); }
-.stat-error .stat-icon { background: var(--color-error-light); color: var(--color-error); }
+.stat-error .stat-icon   { background: var(--color-error-light); color: var(--color-error); }
 .stat-warning .stat-icon { background: var(--color-warning-light); color: var(--color-warning); }
-.stat-purple .stat-icon { background: var(--color-purple-light); color: var(--color-purple); }
+.stat-purple .stat-icon  { background: var(--color-purple-light); color: var(--color-purple); }
 
 .stat-info { display: flex; flex-direction: column; }
 .stat-value { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
-.stat-label { font-size: 0.8rem; color: var(--text-secondary); }
+.stat-label { font-size: 0.78rem; color: var(--text-secondary); }
+
+/* ─── Lower Section ──────────────────── */
+.dashboard-lower {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 1050px) {
+  .dashboard-lower { grid-template-columns: 1fr; }
+}
+
+/* ─── Bar Chart Card ─────────────────── */
+.chart-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.chart-header { margin-bottom: 20px; }
+.chart-title {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+}
+.chart-title h3 { font-size: 1rem; font-weight: 700; }
+.chart-sub { font-size: 0.8rem; color: var(--text-muted); }
+
+.chart-empty {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 10px;
+  min-height: 140px; color: var(--text-muted); font-size: 0.875rem;
+}
+
+.bar-chart {
+  display: flex; align-items: flex-end; gap: 10px;
+  height: 140px; padding-bottom: 24px;
+  position: relative;
+}
+.bar-group {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  position: relative; gap: 4px;
+}
+.bar-track {
+  width: 100%; background: var(--bg-tertiary);
+  border-radius: 6px 6px 0 0;
+  height: 120px; display: flex; align-items: flex-end;
+  overflow: hidden;
+}
+.bar-fill {
+  width: 100%;
+  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-purple) 100%);
+  border-radius: 6px 6px 0 0;
+  animation: growUp 0.6s ease both;
+  min-height: 2px;
+}
+@keyframes growUp {
+  from { height: 0 !important; }
+  to   { /* inherits inline height */ }
+}
+.bar-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  text-align: center; font-size: 0.65rem; color: var(--text-muted);
+  white-space: nowrap;
+}
+.bar-count {
+  position: absolute; top: -20px;
+  font-size: 0.68rem; font-weight: 700; color: var(--color-accent);
+}
+
+.chart-legend {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+.legend-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 0.75rem; color: var(--text-secondary);
+}
+.legend-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+/* ─── Side Panel ─────────────────────── */
+.dashboard-side { display: flex; flex-direction: column; gap: 16px; }
 
 /* Rate Rings */
 .rates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 .rate-card {
   display: flex; flex-direction: column; align-items: center;
-  gap: 12px; padding: 24px;
+  gap: 10px; padding: 20px 16px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 }
 .rate-ring {
-  position: relative; width: 100px; height: 100px;
+  position: relative; width: 88px; height: 88px;
 }
 .rate-ring svg { transform: rotate(-90deg); }
-.ring-bg { fill: none; stroke: var(--border-color); stroke-width: 8; }
+.ring-bg  { fill: none; stroke: var(--border-color); stroke-width: 8; }
 .ring-fill {
   fill: none; stroke-width: 8; stroke-linecap: round;
   transition: stroke-dasharray 1s ease;
 }
-.ring-success { stroke: var(--color-success); }
+.ring-success  { stroke: var(--color-success); }
 .ring-interview { stroke: var(--color-warning); }
 .rate-value {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.25rem; font-weight: 700;
+  font-size: 1.1rem; font-weight: 700;
 }
-.rate-label { font-size: 0.875rem; color: var(--text-secondary); font-weight: 500; }
+.rate-label { font-size: 0.78rem; color: var(--text-secondary); font-weight: 500; text-align: center; }
+
+/* ─── Recent Jobs ────────────────────── */
+.recent-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.recent-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+.recent-header h3 { font-size: 0.9rem; font-weight: 700; }
+.recent-empty { font-size: 0.82rem; color: var(--text-muted); padding: 12px 0; }
+
+.recent-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.recent-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px solid var(--border-color);
+  gap: 10px;
+}
+.recent-item:last-child { border-bottom: none; }
+.recent-info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.recent-title {
+  font-size: 0.83rem; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.recent-company { font-size: 0.72rem; color: var(--text-muted); }
+
+.status-pill {
+  font-size: 0.68rem; font-weight: 700; padding: 3px 9px;
+  border-radius: var(--radius-full); white-space: nowrap; flex-shrink: 0;
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+.status-applied   { background: var(--color-accent-light); color: var(--color-accent); }
+.status-interview { background: var(--color-warning-light); color: var(--color-warning); }
+.status-offer     { background: var(--color-success-light); color: var(--color-success); }
+.status-rejected  { background: var(--color-error-light); color: var(--color-error); }
+.status-saved     { background: var(--color-purple-light); color: var(--color-purple); }
+
+.view-all-link {
+  display: block; margin-top: 12px;
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--color-accent); text-align: right;
+}
+.view-all-link:hover { color: var(--color-accent-hover); }
