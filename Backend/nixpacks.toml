@@ -1,0 +1,9 @@
+# Railway Nixpacks config for Express backend
+[phases.setup]
+nixPkgs = ["nodejs_18", "npm-9_x"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[start]
+cmd = "node server.js"

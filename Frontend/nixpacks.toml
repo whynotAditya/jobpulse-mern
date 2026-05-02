@@ -1,0 +1,13 @@
+# Railway Nixpacks config for Vite React frontend
+[phases.setup]
+nixPkgs = ["nodejs_18", "npm-9_x"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+# Serve the built static files
+[start]
+cmd = "npx -y serve dist -s -l $PORT"
