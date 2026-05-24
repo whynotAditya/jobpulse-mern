@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import {
     LayoutDashboard, Briefcase, FileText, LogOut,
-    Sun, Moon, Kanban, BrainCog, User, Bell, Settings2
+    Sun, Moon, Kanban, BrainCog, User, Bell, Settings2, FileSignature
 } from "lucide-react";
 import "./Layout.css";
 
@@ -21,6 +21,7 @@ const NAV_GROUPS = [
         links: [
             { to: "/resume",         end: false, icon: FileText, label: "Resume AI" },
             { to: "/interview-prep", end: false, icon: BrainCog, label: "Interview Prep" },
+            { to: "/cover-letter",   end: false, icon: FileSignature, label: "Cover Letter" },
         ],
     },
     {
@@ -37,6 +38,7 @@ const PAGE_TITLES = {
     "/kanban":         { title: "Kanban Board",    sub: "Visual pipeline tracker" },
     "/resume":         { title: "Resume AI",       sub: "Upload and analyze resumes" },
     "/interview-prep": { title: "Interview Prep",  sub: "AI-powered preparation hub" },
+    "/cover-letter":   { title: "Cover Letter",    sub: "AI-crafted cover letters" },
     "/profile":        { title: "Profile",         sub: "Account settings & preferences" },
 };
 

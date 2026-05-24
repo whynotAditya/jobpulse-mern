@@ -117,3 +117,98 @@ Return ONLY a valid JSON array with this exact structure:
         questions: staticQuestions,
     });
 });
+
+// ────────────────────────────────────────
+// POST /api/ai/cover-letter
+// Generates a cover letter from job details
+// Uses Google Gemini via REST if GEMINI_API_KEY is set,
+// otherwise returns a smart template.
+// ────────────────────────────────────────
+export const generateCoverLetter = asyncHandler(async (req, res) => {
+    const { jobTitle, company, description, skills, tone } = req.body;
+
+    if (!jobTitle || !company) {
+        res.status(400);
+        throw new Error("Job title and company are required");
+    }
+
+    const toneStyle = tone || "Professional";
+    const context = `Job Title: ${jobTitle}\nCompany: ${company}\nJob Description: ${description || "Not provided"}\nCandidate Skills: ${skills || "Not provided"}\nTone: ${toneStyle}`;
+
+    // ── Try Gemini API ───────────────────
+    if (process.env.GEMINI_API_KEY) {
+        try {
+            const prompt = `You are an expert career coach and professional writer. Write a compelling cover letter for the following job application. The letter should be ${toneStyle.toLowerCase()} in tone.
+
+${context}
+
+Write a complete cover letter that:
+1. Opens with an attention-grabbing introduction
+2. Highlights relevant skills and experience
+3. Shows knowledge of the company
+4. Explains why the candidate is a great fit
+5. Closes with a confident call to action
+
+Return ONLY the cover letter text, no additional commentary. Do not include placeholder brackets like [Your Name] - write it generically so the user can add their details. Start with "Dear Hiring Manager," and end with "Sincerely,".`;
+
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.8, maxOutputTokens: 2000 },
+                    }),
+                }
+            );
+
+            if (response.ok) {
+                const geminiData = await response.json();
+                const rawText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                if (rawText.trim()) {
+                    return res.json({
+                        success: true,
+                        source: "ai",
+                        jobTitle,
+                        company,
+                        tone: toneStyle,
+                        coverLetter: rawText.trim(),
+                    });
+                }
+            }
+        } catch (err) {
+            console.warn("Gemini API failed for cover letter, using template:", err.message);
+        }
+    }
+
+    // ── Fallback: smart template ─────────
+    const skillsList = skills ? skills.split(",").map((s) => s.trim()).filter(Boolean) : ["problem-solving", "communication", "teamwork"];
+    const skillsText = skillsList.length > 2
+        ? `${skillsList.slice(0, -1).join(", ")}, and ${skillsList[skillsList.length - 1]}`
+        : skillsList.join(" and ");
+
+    const templateCoverLetter = `Dear Hiring Manager,
+
+I am writing to express my strong interest in the ${jobTitle} position at ${company}. With my background in ${skillsText}, I am confident in my ability to make meaningful contributions to your team.
+
+${description ? `After carefully reviewing the job description, I was particularly drawn to this opportunity because it aligns perfectly with my professional experience and career aspirations. The responsibilities outlined resonate with my passion for delivering high-quality results in dynamic environments.` : `I have been following ${company}'s growth and innovation with great admiration, and I am excited about the opportunity to contribute to your continued success.`}
+
+Throughout my career, I have developed strong expertise in ${skillsText}. I have consistently demonstrated the ability to tackle complex challenges, collaborate effectively with cross-functional teams, and deliver results that exceed expectations. My approach combines technical excellence with strong communication skills, enabling me to thrive in both independent and team-oriented settings.
+
+What excites me most about ${company} is the opportunity to bring my skills to a team that values innovation and excellence. I am eager to contribute my experience while continuing to grow professionally in an environment that fosters creativity and collaboration.
+
+I would welcome the opportunity to discuss how my background, skills, and enthusiasm align with the goals of your team. Thank you for considering my application. I look forward to the possibility of contributing to ${company}'s continued success.
+
+Sincerely,
+Your Name`;
+
+    res.json({
+        success: true,
+        source: "template",
+        jobTitle,
+        company,
+        tone: toneStyle,
+        coverLetter: templateCoverLetter,
+    });
+});
