@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import {
     LayoutDashboard, Briefcase, FileText, LogOut,
-    Sun, Moon, Kanban, BrainCog, User, Bell, Settings2, FileSignature
+    Sun, Moon, Kanban, BrainCog, User, Bell, Settings2, FileSignature, Calendar
 } from "lucide-react";
 import "./Layout.css";
 
@@ -11,9 +11,10 @@ const NAV_GROUPS = [
     {
         label: "Overview",
         links: [
-            { to: "/",       end: true,  icon: LayoutDashboard, label: "Dashboard" },
-            { to: "/jobs",   end: false, icon: Briefcase,        label: "Jobs" },
-            { to: "/kanban", end: false, icon: Kanban,           label: "Kanban" },
+            { to: "/",         end: true,  icon: LayoutDashboard, label: "Dashboard" },
+            { to: "/jobs",     end: false, icon: Briefcase,        label: "Jobs" },
+            { to: "/kanban",   end: false, icon: Kanban,           label: "Kanban" },
+            { to: "/timeline", end: false, icon: Calendar,         label: "Timeline" },
         ],
     },
     {
@@ -36,6 +37,7 @@ const PAGE_TITLES = {
     "/":               { title: "Dashboard",      sub: "Your job hunt at a glance" },
     "/jobs":           { title: "My Applications", sub: "Track and manage your jobs" },
     "/kanban":         { title: "Kanban Board",    sub: "Visual pipeline tracker" },
+    "/timeline":       { title: "Timeline",        sub: "Chronological application history" },
     "/resume":         { title: "Resume AI",       sub: "Upload and analyze resumes" },
     "/interview-prep": { title: "Interview Prep",  sub: "AI-powered preparation hub" },
     "/cover-letter":   { title: "Cover Letter",    sub: "AI-crafted cover letters" },

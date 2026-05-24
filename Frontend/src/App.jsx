@@ -13,6 +13,7 @@ import ResumePage from "./pages/Resume";
 import KanbanBoard from "./pages/KanbanBoard";
 import InterviewPrep from "./pages/InterviewPrep";
 import CoverLetter from "./pages/CoverLetter";
+import Timeline from "./pages/Timeline";
 import Profile from "./pages/Profile";
 
 function ProtectedRoute({ children }) {
@@ -79,6 +80,11 @@ function App() {
                         <Route path="/cover-letter" element={
                             <ProtectedRoute>
                                 <Layout><CoverLetter /></Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/timeline" element={
+                            <ProtectedRoute>
+                                <Layout><Timeline /></Layout>
                             </ProtectedRoute>
                         } />
                         <Route path="/profile" element={

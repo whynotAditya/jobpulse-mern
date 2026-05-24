@@ -1,0 +1,215 @@
+/* ─── Timeline Page ──────────────────── */
+.timeline-page { padding: 8px 0; }
+
+.timeline-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
+}
+.timeline-header h1 {
+    font-size: 1.75rem; font-weight: 700; margin-bottom: 4px;
+    display: flex; align-items: center;
+}
+.timeline-header p { color: var(--text-secondary); font-size: 0.95rem; }
+
+/* ─── Filters ────────────────────────── */
+.timeline-filters {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 24px; flex-wrap: wrap;
+}
+.tl-filter-chip {
+    padding: 6px 16px; border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.82rem; font-weight: 500;
+    cursor: pointer; font-family: var(--font-sans);
+    transition: all var(--transition-fast);
+}
+.tl-filter-chip:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.tl-filter-chip.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+}
+
+/* ─── Timeline Container ─────────────── */
+.timeline-container {
+    position: relative;
+    padding-left: 40px;
+}
+
+/* Vertical line */
+.timeline-container::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--color-accent), var(--color-purple), var(--color-cyan));
+    border-radius: var(--radius-full);
+}
+
+/* ─── Month Group ────────────────────── */
+.timeline-month-group {
+    margin-bottom: 32px;
+}
+
+.timeline-month-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px;
+    background: linear-gradient(135deg, var(--color-accent-light), var(--color-purple-light));
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: 0.82rem; font-weight: 700;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+    position: relative;
+    left: -32px;
+}
+
+/* ─── Timeline Item ──────────────────── */
+.timeline-item {
+    position: relative;
+    margin-bottom: 12px;
+    animation: fadeIn 0.4s ease both;
+}
+
+/* Dot on the line */
+.timeline-dot {
+    position: absolute;
+    left: -33px;
+    top: 18px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-primary);
+    z-index: 1;
+}
+.timeline-dot.dot-applied   { background: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+.timeline-dot.dot-interview { background: #F59E0B; box-shadow: 0 0 0 3px rgba(245,158,11,0.2); }
+.timeline-dot.dot-offer     { background: #22C55E; box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
+.timeline-dot.dot-rejected  { background: #EF4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.2); }
+.timeline-dot.dot-saved     { background: #8B5CF6; box-shadow: 0 0 0 3px rgba(139,92,246,0.2); }
+
+/* Card */
+.timeline-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+    transition: all var(--transition-fast);
+    cursor: default;
+}
+.timeline-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-hover);
+    transform: translateX(4px);
+}
+
+.tl-card-left {
+    display: flex; align-items: center; gap: 14px;
+    flex: 1; min-width: 0;
+}
+
+.tl-company-icon {
+    width: 40px; height: 40px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-tertiary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--color-accent);
+    flex-shrink: 0;
+}
+
+.tl-card-info {
+    display: flex; flex-direction: column; gap: 2px;
+    min-width: 0;
+}
+.tl-card-title {
+    font-size: 0.925rem; font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tl-card-company {
+    font-size: 0.82rem; color: var(--text-secondary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.tl-card-right {
+    display: flex; align-items: center; gap: 12px;
+    flex-shrink: 0;
+}
+.tl-card-date {
+    font-size: 0.78rem; color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.tl-status-pill {
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+.tl-status-applied   { background: rgba(59,130,246,0.12); color: #3B82F6; }
+.tl-status-interview { background: rgba(245,158,11,0.12); color: #F59E0B; }
+.tl-status-offer     { background: rgba(34,197,94,0.12); color: #22C55E; }
+.tl-status-rejected  { background: rgba(239,68,68,0.12); color: #EF4444; }
+.tl-status-saved     { background: rgba(139,92,246,0.12); color: #8B5CF6; }
+
+/* ─── Stats Bar ──────────────────────── */
+.timeline-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+}
+.tl-stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex; align-items: center; gap: 12px;
+    animation: fadeIn 0.4s ease both;
+}
+.tl-stat-icon {
+    width: 36px; height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.tl-stat-icon.bg-accent  { background: var(--color-accent-light); color: var(--color-accent); }
+.tl-stat-icon.bg-success { background: var(--color-success-light); color: var(--color-success); }
+.tl-stat-icon.bg-warning { background: var(--color-warning-light); color: var(--color-warning); }
+.tl-stat-icon.bg-error   { background: var(--color-error-light); color: var(--color-error); }
+.tl-stat-icon.bg-purple  { background: var(--color-purple-light); color: var(--color-purple); }
+
+.tl-stat-info { display: flex; flex-direction: column; }
+.tl-stat-value { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
+.tl-stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ─── Empty State ────────────────────── */
+.timeline-empty {
+    text-align: center; padding: 56px 24px;
+    color: var(--text-muted);
+}
+.timeline-empty-icon { font-size: 3rem; display: block; margin-bottom: 16px; }
+.timeline-empty h3 { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+.timeline-empty p { font-size: 0.875rem; }
+
+/* ─── Responsive ─────────────────────── */
+@media (max-width: 600px) {
+    .timeline-container { padding-left: 32px; }
+    .timeline-container::before { left: 11px; }
+    .timeline-dot { left: -29px; width: 10px; height: 10px; }
+    .timeline-month-label { left: -24px; }
+    .timeline-card { flex-direction: column; align-items: flex-start; }
+    .tl-card-right { align-self: flex-end; }
+}
