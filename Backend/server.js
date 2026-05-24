@@ -13,6 +13,7 @@ import authRoutes from "./routes/authRoutes.js";
 import jobRoutes from "./routes/jobroutes.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import reminderRoutes from "./routes/reminderRoutes.js";
 
 // ─── Config ──────────────────────────────
 dotenv.config();
@@ -76,6 +77,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/reminders", reminderRoutes);
 
 // ─── Error Handling ──────────────────────
 app.use(notFound);

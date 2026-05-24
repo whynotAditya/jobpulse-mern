@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import {
     LayoutDashboard, Briefcase, FileText, LogOut,
-    Sun, Moon, Kanban, BrainCog, User, Bell, Settings2, FileSignature, Calendar
+    Sun, Moon, Kanban, BrainCog, User, Bell, Settings2, FileSignature, Calendar, Target
 } from "lucide-react";
 import "./Layout.css";
 
@@ -28,7 +28,8 @@ const NAV_GROUPS = [
     {
         label: "Account",
         links: [
-            { to: "/profile", end: false, icon: User, label: "Profile" },
+            { to: "/reminders", end: false, icon: Target, label: "Reminders" },
+            { to: "/profile",   end: false, icon: User,   label: "Profile" },
         ],
     },
 ];
@@ -41,6 +42,7 @@ const PAGE_TITLES = {
     "/resume":         { title: "Resume AI",       sub: "Upload and analyze resumes" },
     "/interview-prep": { title: "Interview Prep",  sub: "AI-powered preparation hub" },
     "/cover-letter":   { title: "Cover Letter",    sub: "AI-crafted cover letters" },
+    "/reminders":      { title: "Reminders",       sub: "Track goals & follow-ups" },
     "/profile":        { title: "Profile",         sub: "Account settings & preferences" },
 };
 

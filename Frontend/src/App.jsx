@@ -14,6 +14,7 @@ import KanbanBoard from "./pages/KanbanBoard";
 import InterviewPrep from "./pages/InterviewPrep";
 import CoverLetter from "./pages/CoverLetter";
 import Timeline from "./pages/Timeline";
+import Reminders from "./pages/Reminders";
 import Profile from "./pages/Profile";
 
 function ProtectedRoute({ children }) {
@@ -85,6 +86,11 @@ function App() {
                         <Route path="/timeline" element={
                             <ProtectedRoute>
                                 <Layout><Timeline /></Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/reminders" element={
+                            <ProtectedRoute>
+                                <Layout><Reminders /></Layout>
                             </ProtectedRoute>
                         } />
                         <Route path="/profile" element={

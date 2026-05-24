@@ -1,0 +1,273 @@
+/* ─── Reminders Page ─────────────────── */
+.reminders-page { padding: 8px 0; }
+
+.reminders-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
+}
+.reminders-header h1 {
+    font-size: 1.75rem; font-weight: 700; margin-bottom: 4px;
+    display: flex; align-items: center;
+}
+.reminders-header p { color: var(--text-secondary); font-size: 0.95rem; }
+
+.add-reminder-btn {
+    display: flex; align-items: center; gap: 7px;
+    padding: 10px 20px; border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--color-accent), var(--color-purple));
+    color: white; font-family: var(--font-sans);
+    font-size: 0.9rem; font-weight: 600;
+    border: none; cursor: pointer;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+    box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+}
+.add-reminder-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ─── Quick Stats ────────────────────── */
+.reminder-quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.rq-stat {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 10px;
+    animation: fadeIn 0.4s ease both;
+}
+.rq-stat-icon {
+    width: 34px; height: 34px;
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 0.85rem;
+}
+.rq-stat-icon.rq-overdue { background: var(--color-error-light); color: var(--color-error); }
+.rq-stat-icon.rq-today   { background: var(--color-warning-light); color: var(--color-warning); }
+.rq-stat-icon.rq-upcoming { background: var(--color-accent-light); color: var(--color-accent); }
+.rq-stat-icon.rq-done    { background: var(--color-success-light); color: var(--color-success); }
+
+.rq-stat-info { display: flex; flex-direction: column; }
+.rq-stat-value { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); }
+.rq-stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ─── Tab Filters ────────────────────── */
+.reminder-tabs {
+    display: flex; gap: 4px; margin-bottom: 20px;
+    background: var(--bg-tertiary);
+    padding: 4px; border-radius: var(--radius-md);
+    width: fit-content;
+}
+.rem-tab {
+    padding: 7px 18px; border-radius: var(--radius-sm);
+    background: none; border: none;
+    color: var(--text-secondary); font-family: var(--font-sans);
+    font-size: 0.82rem; font-weight: 500; cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.rem-tab:hover { color: var(--text-primary); }
+.rem-tab.active {
+    background: var(--bg-secondary);
+    color: var(--color-accent);
+    font-weight: 600;
+    box-shadow: var(--shadow-xs);
+}
+
+/* ─── Reminder List ──────────────────── */
+.reminder-list {
+    display: flex; flex-direction: column; gap: 8px;
+}
+
+.reminder-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 14px;
+    transition: all var(--transition-fast);
+    animation: fadeIn 0.3s ease both;
+}
+.reminder-item:hover {
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border-hover);
+}
+.reminder-item.completed {
+    opacity: 0.6;
+}
+.reminder-item.overdue {
+    border-left: 3px solid var(--color-error);
+}
+.reminder-item.due-today {
+    border-left: 3px solid var(--color-warning);
+}
+
+/* Checkbox */
+.rem-check {
+    width: 20px; height: 20px;
+    border-radius: var(--radius-xs);
+    border: 2px solid var(--border-hover);
+    background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    color: transparent;
+}
+.rem-check:hover { border-color: var(--color-accent); }
+.rem-check.checked {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: white;
+}
+
+.rem-content { flex: 1; min-width: 0; }
+.rem-title {
+    font-size: 0.9rem; font-weight: 600;
+    color: var(--text-primary);
+    display: flex; align-items: center; gap: 8px;
+}
+.rem-title.done { text-decoration: line-through; color: var(--text-muted); }
+
+.rem-desc {
+    font-size: 0.8rem; color: var(--text-secondary);
+    margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.rem-meta {
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+}
+
+.rem-priority {
+    padding: 3px 10px; border-radius: var(--radius-full);
+    font-size: 0.68rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em;
+}
+.rem-priority.pri-low    { background: var(--color-success-light); color: var(--color-success); }
+.rem-priority.pri-medium { background: var(--color-warning-light); color: var(--color-warning); }
+.rem-priority.pri-high   { background: var(--color-orange-light); color: var(--color-orange); }
+.rem-priority.pri-urgent { background: var(--color-error-light); color: var(--color-error); }
+
+.rem-type-badge {
+    padding: 3px 10px; border-radius: var(--radius-full);
+    font-size: 0.68rem; font-weight: 600;
+    background: var(--color-accent-light); color: var(--color-accent);
+}
+
+.rem-due {
+    font-size: 0.75rem; color: var(--text-muted);
+    white-space: nowrap;
+    display: flex; align-items: center; gap: 4px;
+}
+.rem-due.overdue-text { color: var(--color-error); font-weight: 600; }
+.rem-due.today-text { color: var(--color-warning); font-weight: 600; }
+
+.rem-delete-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); padding: 4px;
+    transition: color var(--transition-fast);
+}
+.rem-delete-btn:hover { color: var(--color-error); }
+
+/* ─── Job Link ───────────────────────── */
+.rem-job-link {
+    font-size: 0.72rem; color: var(--color-accent);
+    display: flex; align-items: center; gap: 4px;
+    margin-top: 3px;
+}
+
+/* ─── Modal ──────────────────────────── */
+.rem-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+.rem-modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: var(--shadow-xl);
+    animation: slideUp 0.3s ease;
+}
+.rem-modal h2 {
+    font-size: 1.2rem; font-weight: 700;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+}
+
+.rem-form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.rem-form-group label {
+    font-size: 0.82rem; font-weight: 600; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: 0.04em;
+}
+.rem-form-group input,
+.rem-form-group textarea,
+.rem-form-group select {
+    padding: 10px 14px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    transition: border-color var(--transition-fast);
+    outline: none;
+    width: 100%;
+}
+.rem-form-group input:focus,
+.rem-form-group textarea:focus,
+.rem-form-group select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-light);
+}
+
+.rem-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.rem-modal-actions {
+    display: flex; gap: 10px; justify-content: flex-end;
+    margin-top: 20px;
+}
+.rem-save-btn {
+    padding: 10px 24px; border-radius: var(--radius-sm);
+    background: var(--color-accent); color: white;
+    border: none; cursor: pointer;
+    font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600;
+    transition: opacity var(--transition-fast);
+}
+.rem-save-btn:hover { opacity: 0.9; }
+.rem-cancel-btn {
+    padding: 10px 24px; border-radius: var(--radius-sm);
+    background: none; border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: var(--font-sans); font-size: 0.9rem; font-weight: 500;
+    transition: all var(--transition-fast);
+}
+.rem-cancel-btn:hover { border-color: var(--color-error); color: var(--color-error); }
+
+/* ─── Empty State ────────────────────── */
+.reminders-empty {
+    text-align: center; padding: 56px 24px;
+    color: var(--text-muted);
+}
+.reminders-empty-icon { font-size: 3rem; display: block; margin-bottom: 16px; }
+.reminders-empty h3 { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+.reminders-empty p { font-size: 0.875rem; }
+
+@media (max-width: 600px) {
+    .reminder-item { flex-wrap: wrap; }
+    .rem-meta { flex-wrap: wrap; }
+    .rem-form-row { grid-template-columns: 1fr; }
+}
