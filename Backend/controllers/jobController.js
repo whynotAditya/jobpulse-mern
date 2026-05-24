@@ -205,3 +205,120 @@ export const getWeeklyStats = asyncHandler(async (req, res) => {
 
     res.json({ success: true, data: result });
 });
+
+// ────────────────────────────────────────
+// GET /api/jobs/salary-analytics
+// Returns salary insights from job data
+// ────────────────────────────────────────
+export const getSalaryAnalytics = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const jobs = await Job.find({ user: userId });
+
+    // Parse salary strings to numbers (handles "$80k", "80,000", "$80,000-$100,000", etc.)
+    function parseSalary(salaryStr) {
+        if (!salaryStr) return null;
+        const cleaned = salaryStr.replace(/[^0-9.\-–kK]/g, "");
+        if (!cleaned) return null;
+
+        // Handle range (take average)
+        const parts = cleaned.split(/[-–]/);
+        const values = parts.map((p) => {
+            let num = parseFloat(p);
+            if (isNaN(num)) return null;
+            if (/k/i.test(salaryStr) && num < 1000) num *= 1000;
+            return num;
+        }).filter(Boolean);
+
+        if (values.length === 0) return null;
+        return values.reduce((a, b) => a + b, 0) / values.length;
+    }
+
+    const jobsWithSalary = jobs
+        .map((j) => ({ ...j.toObject(), parsedSalary: parseSalary(j.salary) }))
+        .filter((j) => j.parsedSalary !== null);
+
+    if (jobsWithSalary.length === 0) {
+        return res.json({
+            success: true,
+            data: {
+                totalWithSalary: 0,
+                totalWithout: jobs.length,
+                average: 0,
+                median: 0,
+                min: 0,
+                max: 0,
+                byStatus: [],
+                byCompany: [],
+                distribution: [],
+            },
+        });
+    }
+
+    const salaries = jobsWithSalary.map((j) => j.parsedSalary).sort((a, b) => a - b);
+    const sum = salaries.reduce((a, b) => a + b, 0);
+    const average = Math.round(sum / salaries.length);
+    const median = salaries.length % 2 === 0
+        ? Math.round((salaries[salaries.length / 2 - 1] + salaries[salaries.length / 2]) / 2)
+        : Math.round(salaries[Math.floor(salaries.length / 2)]);
+    const min = Math.round(salaries[0]);
+    const max = Math.round(salaries[salaries.length - 1]);
+
+    // By status
+    const statusMap = {};
+    jobsWithSalary.forEach((j) => {
+        if (!statusMap[j.status]) statusMap[j.status] = [];
+        statusMap[j.status].push(j.parsedSalary);
+    });
+    const byStatus = Object.entries(statusMap).map(([status, sals]) => ({
+        status,
+        count: sals.length,
+        average: Math.round(sals.reduce((a, b) => a + b, 0) / sals.length),
+        min: Math.round(Math.min(...sals)),
+        max: Math.round(Math.max(...sals)),
+    }));
+
+    // By company (top 10)
+    const companyMap = {};
+    jobsWithSalary.forEach((j) => {
+        if (!companyMap[j.company]) companyMap[j.company] = [];
+        companyMap[j.company].push(j.parsedSalary);
+    });
+    const byCompany = Object.entries(companyMap)
+        .map(([company, sals]) => ({
+            company,
+            count: sals.length,
+            average: Math.round(sals.reduce((a, b) => a + b, 0) / sals.length),
+        }))
+        .sort((a, b) => b.average - a.average)
+        .slice(0, 10);
+
+    // Salary distribution (brackets)
+    const brackets = [
+        { label: "< $30k", min: 0, max: 30000 },
+        { label: "$30k-$50k", min: 30000, max: 50000 },
+        { label: "$50k-$75k", min: 50000, max: 75000 },
+        { label: "$75k-$100k", min: 75000, max: 100000 },
+        { label: "$100k-$150k", min: 100000, max: 150000 },
+        { label: "$150k-$200k", min: 150000, max: 200000 },
+        { label: "$200k+", min: 200000, max: Infinity },
+    ];
+    const distribution = brackets.map((b) => ({
+        label: b.label,
+        count: salaries.filter((s) => s >= b.min && s < b.max).length,
+    }));
+
+    res.json({
+        success: true,
+        data: {
+            totalWithSalary: jobsWithSalary.length,
+            totalWithout: jobs.length - jobsWithSalary.length,
+            average,
+            median,
+            min,
+            max,
+            byStatus,
+            byCompany,
+            distribution,
+        },
+    });
+});

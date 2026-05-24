@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import {
     LayoutDashboard, Briefcase, FileText, LogOut,
-    Sun, Moon, Kanban, BrainCog, User, Bell, Settings2, FileSignature, Calendar, Target
+    Sun, Moon, Kanban, BrainCog, User, Bell, Settings2, FileSignature, Calendar, Target, DollarSign
 } from "lucide-react";
 import "./Layout.css";
 
@@ -15,6 +15,7 @@ const NAV_GROUPS = [
             { to: "/jobs",     end: false, icon: Briefcase,        label: "Jobs" },
             { to: "/kanban",   end: false, icon: Kanban,           label: "Kanban" },
             { to: "/timeline", end: false, icon: Calendar,         label: "Timeline" },
+            { to: "/salary",   end: false, icon: DollarSign,       label: "Salary" },
         ],
     },
     {
@@ -43,6 +44,7 @@ const PAGE_TITLES = {
     "/interview-prep": { title: "Interview Prep",  sub: "AI-powered preparation hub" },
     "/cover-letter":   { title: "Cover Letter",    sub: "AI-crafted cover letters" },
     "/reminders":      { title: "Reminders",       sub: "Track goals & follow-ups" },
+    "/salary":         { title: "Salary Analytics", sub: "Compensation insights" },
     "/profile":        { title: "Profile",         sub: "Account settings & preferences" },
 };
 

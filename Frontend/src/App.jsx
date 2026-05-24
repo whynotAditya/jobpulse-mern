@@ -15,6 +15,7 @@ import InterviewPrep from "./pages/InterviewPrep";
 import CoverLetter from "./pages/CoverLetter";
 import Timeline from "./pages/Timeline";
 import Reminders from "./pages/Reminders";
+import SalaryAnalytics from "./pages/SalaryAnalytics";
 import Profile from "./pages/Profile";
 
 function ProtectedRoute({ children }) {
@@ -91,6 +92,11 @@ function App() {
                         <Route path="/reminders" element={
                             <ProtectedRoute>
                                 <Layout><Reminders /></Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/salary" element={
+                            <ProtectedRoute>
+                                <Layout><SalaryAnalytics /></Layout>
                             </ProtectedRoute>
                         } />
                         <Route path="/profile" element={
