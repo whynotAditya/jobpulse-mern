@@ -14,6 +14,7 @@ import jobRoutes from "./routes/jobroutes.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import reminderRoutes from "./routes/reminderRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 
 // ─── Config ──────────────────────────────
 dotenv.config();
@@ -69,6 +70,8 @@ app.get("/", (_req, res) => {
             jobs: "/api/jobs",
             resume: "/api/resume",
             ai: "/api/ai",
+            reminders: "/api/reminders",
+            notifications: "/api/notifications",
         },
     });
 });
@@ -78,6 +81,7 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/reminders", reminderRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // ─── Error Handling ──────────────────────
 app.use(notFound);
